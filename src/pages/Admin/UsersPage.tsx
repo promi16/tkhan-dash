@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft } from "lucide-react"; // Ban icon remove kora hoyeche
+import { ArrowLeft } from "lucide-react";
 import { UserTable } from "@/components/AdminDashboard/Users/UserTable";
 import { UserDetails } from "@/components/AdminDashboard/Users/UserDetails";
 import { UserBookings } from "@/components/AdminDashboard/Users/UserBookings";
@@ -9,8 +9,9 @@ import { UserFeedback } from "@/components/AdminDashboard/Users/UserFeedback";
 const UsersPage = () => {
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("Details");
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-  // User list dynamic data
   const users = [
     {
       id: "U001",
@@ -32,77 +33,72 @@ const UsersPage = () => {
       joinDate: "2024-02-20",
       totalBookings: 8,
     },
-    {
-      id: "U003",
-      name: "Mike Davis",
-      email: "mike.davis@email.com",
-      phone: "+1 234 567 8903",
-      role: "Buyer" as const,
-      status: "Active" as const,
-      joinDate: "2024-03-10",
-      totalBookings: 15,
-    },
-    {
-      id: "U004",
-      name: "Emily Brown",
-      email: "emily.b@email.com",
-      phone: "+1 234 567 8904",
-      role: "Seller" as const,
-      status: "Active" as const,
-      joinDate: "2024-01-25",
-      totalBookings: 5,
-    },
-    {
-      id: "U005",
-      name: "David Wilson",
-      email: "david.w@email.com",
-      phone: "+1 234 567 8905",
-      role: "Buyer" as const,
-      status: "Blocked" as const,
-      joinDate: "2024-04-05",
-      totalBookings: 0,
-    },
-    {
-      id: "U006",
-      name: "Lisa Anderson",
-      email: "lisa.a@email.com",
-      phone: "+1 234 567 8906",
-      role: "Seller" as const,
-      status: "Active" as const,
-      joinDate: "2024-02-14",
-      totalBookings: 22,
-    },
-    {
-      id: "U007",
-      name: "James Taylor",
-      email: "james.t@email.com",
-      phone: "+1 234 567 8907",
-      role: "Buyer" as const,
-      status: "Active" as const,
-      joinDate: "2024-03-22",
-      totalBookings: 10,
-    },
-    {
-      id: "U008",
-      name: "Maria Garcia",
-      email: "maria.g@email.com",
-      phone: "+1 234 567 8908",
-      role: "Seller" as const,
-      status: "Active" as const,
-      joinDate: "2024-01-30",
-      totalBookings: 14,
-    },
   ];
 
   const selectedUserData = useMemo(() => {
     return users.find((u) => u.id === selectedUser);
-  }, [selectedUser]);
+  }, [selectedUser, users]);
 
   const tabs = ["User Details", "Bookings", "User Feedback"];
 
+  const handleBlockToggle = () => {
+    setIsBlocked(!isBlocked);
+    setShowModal(false);
+  };
+
   return (
-    <div className="w-full">
+    <div className="w-full max-w-[1485px] mx-auto px-4 sm:px-6">
       <AnimatePresence mode="wait">
+        {showModal && (
+          <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white p-6 md:p-8 rounded-2xl shadow-2xl max-w-sm w-full mx-auto text-center"
+            >
+              <div
+                className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${isBlocked ? "bg-green-50 text-green-500" : "bg-red-50 text-red-500"}`}
+              >
+                <svg
+                  width="32"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                {isBlocked
+                  ? `Unblock ${selectedUserData?.name}?`
+                  : `Block ${selectedUserData?.name}?`}
+              </h3>
+              <p className="text-sm text-gray-500 mb-6">
+                Are you sure you want to {isBlocked ? "unblock" : "block"} this
+                user?
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="flex-1 py-3 bg-gray-100 rounded-xl font-medium cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleBlockToggle}
+                  className={`flex-1 py-3 text-white rounded-xl font-medium cursor-pointer ${isBlocked ? "bg-green-600" : "bg-red-600"}`}
+                >
+                  {isBlocked ? "Unblock" : "Confirm"}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
         {!selectedUser ? (
           <motion.div
             key="list"
@@ -110,72 +106,102 @@ const UsersPage = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <div className="mb-8">
-              <h1 className="text-2xl font-black text-[#0f2f1d]">
+            <div className="mb-8 mt-4">
+              <h1 className="text-2xl font-semibold text-[#0f2f1d]">
                 User Management
               </h1>
-              <p className="text-gray-400 font-medium">
+              <p className="text-gray-700 font-light">
                 Manage all platform users
               </p>
             </div>
-            <UserTable onViewDetails={(id) => setSelectedUser(id)} />
+            <div className="overflow-hidden rounded-xl border border-gray-100">
+              <div className="overflow-x-auto">
+                <UserTable onViewDetails={(id) => setSelectedUser(id)} />
+              </div>
+            </div>
           </motion.div>
         ) : (
           <motion.div
             key="details"
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -30 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="pt-4"
           >
-            {/* Back Button Section */}
             <button
               onClick={() => {
                 setSelectedUser(null);
                 setActiveTab("Details");
               }}
-              className="mb-6 p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 cursor-pointer active:scale-90"
+              className="mb-6 p-2 hover:bg-gray-100 rounded-full text-gray-400 cursor-pointer"
             >
-              <ArrowLeft size={28} />
+              <ArrowLeft size={24} />
             </button>
 
-            {/* Sub-Header Tabs - (Block User Button Removed) */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-gray-100 mb-10 gap-4">
-              <div className="flex gap-8 lg:gap-12 overflow-x-auto no-scrollbar">
+            <div className="flex items-center border-b border-gray-100 mb-8 overflow-x-auto scrollbar-hide no-scrollbar">
+              <div className="flex items-center gap-6 sm:gap-8 lg:gap-10 min-w-max pb-[2px]">
+                {/* Tabs Rendering */}
                 {tabs.map((tab) => {
                   const tabKey = tab.split(" ").pop()!;
+                  const isActive = activeTab === tabKey;
                   return (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tabKey)}
-                      className={`pb-4 font-bold text-sm lg:text-base whitespace-nowrap relative transition-colors cursor-pointer ${
-                        activeTab === tabKey
+                      className={`pb-4 font-bold text-sm whitespace-nowrap relative transition-colors cursor-pointer ${
+                        isActive
                           ? "text-[#FF6B35]"
                           : "text-gray-400 hover:text-[#1E293B]"
                       }`}
                     >
                       {tab}
-                      {activeTab === tabKey && (
+                      {isActive && (
                         <motion.div
                           layoutId="tabUnderline"
-                          className="absolute bottom-0 left-0 right-0 h-1 bg-[#FF6B35] rounded-t-full"
+                          className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#FF6B35] rounded-t-full"
                         />
                       )}
                     </button>
                   );
                 })}
+
+                {activeTab !== "Details" && (
+                  <div className="pb-4">
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setShowModal(true)}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-xl text-white text-[10px] md:text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
+                        isBlocked
+                          ? "bg-green-100 !text-green-700 border border-green-200"
+                          : "bg-[#E10000]"
+                      }`}
+                    >
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                      >
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                      </svg>
+                      {isBlocked ? "Unblock User" : "Block User"}
+                    </motion.button>
+                  </div>
+                )}
               </div>
-              {/* Button section removed entirely */}
             </div>
 
-            {/* Dynamic Tab Content with Animations */}
-            <div className="w-full">
+            <div className="w-full overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeTab}
-                  initial={{ opacity: 0, y: 15 }}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -15 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
                 >
                   {activeTab === "Details" && (
                     <UserDetails user={selectedUserData} />

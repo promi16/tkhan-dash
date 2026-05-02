@@ -6,10 +6,8 @@ export default function Hero() {
   return (
     <div>
       <div className="bg-gradient-to-br from-teal-500 to-blue-600 mt-[70px]">
-        {/* Hero Section */}
         <div className="max-w-[1200px] mx-auto px-3 md:px-10 xl:px-0">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Content */}
             <div className="text-white space-y-6 mb-5 pt-10 lg:pb-28">
               <div className="space-y-4">
                 <h1 className="text-4xl md:text-5xl lg:text-6xl text-[#13161B] font-bold leading-tight">
@@ -17,7 +15,6 @@ export default function Hero() {
                   <br />
                   <span className="relative text-[#FEFAF5] inline-block">
                     Courier Service
-                    {/* Curved underline SVG */}
                     <svg
                       className="absolute -bottom-2 left-0 w-full h-3"
                       viewBox="0 0 300 12"
@@ -43,7 +40,6 @@ export default function Hero() {
               </button>
             </div>
 
-            {/* Right Content - Delivery Person with Floating Icons */}
             <div className="hidden lg:block -mb-8">
               <img src={heroImage} alt="" />
             </div>

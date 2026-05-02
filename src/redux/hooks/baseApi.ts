@@ -9,11 +9,11 @@ if (!baseURL) {
 
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: baseURL,
-  credentials: "include", // Changed from "omit" to "include"
+  credentials: "include",
   prepareHeaders: (headers) => {
     const token = Cookies.get("token");
     if (token) {
-      headers.set("Authorization", `${token}`);
+      headers.set("Authorization", ` Bearer ${token}`);
     }
     headers.set("Content-Type", "application/json");
     return headers;

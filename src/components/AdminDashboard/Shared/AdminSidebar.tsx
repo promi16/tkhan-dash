@@ -1,398 +1,144 @@
-// AdminSidebar.tsx
-import logo from "@/assets/Logo/LogoMain.svg";
-import { Badge } from "@/components/ui/badge";
-
-import { RiShareBoxLine } from "react-icons/ri";
+import React from "react";
 import {
-  CheckCircle,
-  ChevronDown,
-  CreditCard,
-  HelpCircle,
   LayoutGrid,
   Users,
+  CheckCircle,
+  CreditCard,
+  HelpCircle,
+  LucideIcon,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
-import { IconType } from "react-icons";
+import { motion, Variants } from "framer-motion";
 
-// Types
 export interface SidebarItem {
-  icon: IconType; // changed from string to IconType
+  icon: LucideIcon;
   label: string;
-  href?: string;
-  badge?: string;
-  children?: { label: string; href: string }[];
+  href: string;
 }
 
 export interface SidebarProps {
-  items?: SidebarItem[];
   onItemClick?: () => void;
 }
 
-// Sidebar Items
-const defaultSidebarItems: SidebarItem[] = [
+const sidebarItems: SidebarItem[] = [
   { icon: LayoutGrid, label: "Dashboard", href: "/admin-dashboard/dashboard" },
-  {
-    icon: Users,
-    label: "Users",
-    href: "/admin-dashboard/users",
-  },
+  { icon: Users, label: "Users", href: "/admin-dashboard/users" },
   {
     icon: CheckCircle,
     label: "Seller Approval",
     href: "/admin-dashboard/seller-approval",
   },
-  {
-    icon: CreditCard,
-    label: "Payments",
-    href: "/admin-dashboard/payments",
-  },
-  {
-    icon: HelpCircle,
-    label: "Support",
-    href: "/admin-dashboard/support",
-  },
+  { icon: CreditCard, label: "Payments", href: "/admin-dashboard/payments" },
+  { icon: HelpCircle, label: "Support", href: "/admin-dashboard/support" },
 ];
 
-const AdminSidebar: React.FC<SidebarProps> = ({
-  items = defaultSidebarItems,
-  onItemClick,
-}) => {
+const AdminSidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
   const location = useLocation();
-  const [openMenu, setOpenMenu] = useState<string | null>(null);
 
-  const toggleMenu = (label: string) => {
-    setOpenMenu(openMenu === label ? null : label);
+  const mobileMenuVariants: Variants = {
+    hidden: {
+      opacity: 0,
+      y: -15,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   return (
-    <div
-      className="flex flex-col h-full bg-white"
-      style={{ boxShadow: "3px 4px 42.3px 0px #0000001A" }}
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={mobileMenuVariants}
+      className="flex flex-col bg-white border-r border-b border-gray-100 font-inter overflow-hidden shrink-0 w-full mb-20"
+      style={{
+        boxShadow: "4px 4px 15px rgba(0,0,0,0.02)",
+        height: "auto",
+        minHeight: "799px",
+      }}
     >
-      {/* Logo */}
-      <Link to="/admin-dashboard/dashboard">
-        <div className="flex flex-col items-startjustify-start p-3 mt-1">
-          <h1 className="text-[#FF6B35] text-2xl font-black">Karoo</h1>
-          <p className="text-xs font-bold text-gray-400">Admin Panel</p>
-        </div>
-      </Link>
-
-      {/* Navigation */}
-      {/* Navigation */}
-      <nav className="flex-1 p-2 md:p-4">
-        <div className="space-y-4 md:space-y-6">
-          {items.map((item) => {
-            const isActive =
-              location.pathname === item.href ||
-              item.children?.some((child) => location.pathname === child.href);
-
-            const isOpen = openMenu === item.label;
-
-            return (
-              <div key={item.label}>
-                {item.href && !item.children ? (
-                  <Link
-                    to={item.href}
-                    onClick={onItemClick}
-                    className={`group flex items-center justify-between w-full px-4 py-3 rounded-2xl font-semibold transition-all duration-300 ${
-                      isActive
-                        ? "bg-[#FFEDE6] text-[#FF6B35] shadow-sm"
-                        : "text-gray-500 hover:bg-[#FFF4EF] hover:text-[#FF6B35]"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <item.icon
-                        className={`w-5 h-5 transition-all ${
-                          isActive
-                            ? "text-[#FF6B35]"
-                            : "text-gray-400 group-hover:text-[#FF6B35]"
-                        }`}
-                      />
-                      <span>{item.label}</span>
-                    </div>
-                  </Link>
-                ) : (
-                  <button
-                    onClick={() => toggleMenu(item.label)}
-                    className={`group flex items-center justify-between w-full px-4 py-3 rounded-2xl font-semibold transition-all duration-300 ${
-                      isActive
-                        ? "bg-[#FFEDE6] text-[#FF6B35] shadow-sm"
-                        : "text-gray-500 hover:bg-[#FFF4EF] hover:text-[#FF6B35]"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <item.icon
-                        className={`w-5 h-5 transition-all ${
-                          isActive
-                            ? "text-[#FF6B35]"
-                            : "text-gray-400 group-hover:text-[#FF6B35]"
-                        }`}
-                      />
-                      <span>{item.label}</span>
-                    </div>
-
-                    {item.children && (
-                      <ChevronDown
-                        className={`w-4 h-4 transition-transform duration-300 ${
-                          isOpen ? "rotate-180" : ""
-                        }`}
-                      />
-                    )}
-
-                    {item.badge && (
-                      <Badge
-                        variant="secondary"
-                        className="text-xs bg-[#FFEDE6] text-[#FF6B35] border-none"
-                      >
-                        {item.badge}
-                      </Badge>
-                    )}
-                  </button>
-                )}
-
-                {/* Children */}
-                {item.children && isOpen && (
-                  <div className="ml-6 mt-2 space-y-2">
-                    {item.children.map((child) => {
-                      const childActive = location.pathname === child.href;
-
-                      return (
-                        <Link
-                          key={child.label}
-                          to={child.href}
-                          onClick={onItemClick}
-                          className={`block px-3 py-2 rounded-lg text-sm transition-all ${
-                            childActive
-                              ? "bg-[#FFEDE6] text-[#FF6B35]"
-                              : "text-gray-400 hover:bg-[#FFF4EF] hover:text-[#FF6B35]"
-                          }`}
-                        >
-                          {child.label}
-                        </Link>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </nav>
-
-      {/* Help & Support */}
-      <div className="p-2 md:p-4 border-t border-[#C9C6C3]">
-        <div className="flex justify-center mb-1">
-          <img src={logo} alt="Logo" className="h-5 w-auto" />
-        </div>
-        <Link
-          to="/client-dashboard/help-support"
-          className="flex items-center justify-center space-x-3 text-white hover:text-[#3A5BF8] transition-colors"
-        >
-          <span className="text-sm font-medium">Help & Support</span>
-          <RiShareBoxLine className="w-5 h-5 text-gray-300" />
+      <div className="p-8 mb-2">
+        <Link to="/admin-dashboard/dashboard">
+          <div className="flex flex-col items-start">
+            <h1 className="text-[#FF6B35] text-[28px] font-semibold tracking-tight leading-none">
+              Karoo
+            </h1>
+            <p className="text-[13px] font-semibold text-gray-700 mt-1 tracking-wider">
+              Admin Panel
+            </p>
+          </div>
         </Link>
       </div>
-    </div>
+
+      <nav className="flex-1 px-4 space-y-1">
+        {sidebarItems.map((item) => {
+          const isActive = location.pathname === item.href;
+          const Icon = item.icon;
+
+          return (
+            <Link
+              key={item.label}
+              to={item.href}
+              onClick={onItemClick}
+              className="relative block"
+            >
+              <motion.div
+                whileHover={{ x: 4 }}
+                whileTap={{ scale: 0.98 }}
+                className={`flex items-center gap-4 px-5 py-2.5 rounded-xl transition-all duration-300 relative overflow-hidden ${
+                  isActive
+                    ? "text-[#FF6B35] bg-[#FFEDE6]"
+                    : "text-gray-700 hover:bg-[#FF6B35]/5 hover:text-[#FF6B35]"
+                }`}
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="activeTab"
+                    className="absolute right-0 top-0 bottom-0 w-[3px] bg-[#FF6B35] rounded-l-full"
+                  />
+                )}
+                <Icon
+                  size={20}
+                  strokeWidth={isActive ? 2.5 : 2}
+                  className={
+                    isActive
+                      ? "text-[#FF6B35] cursor-pointer"
+                      : "text-gray-800 group-hover:text-[#FF6B35] cursor-pointer"
+                  }
+                />
+                <span className="text-[15px] font-medium">{item.label}</span>
+              </motion.div>
+            </Link>
+          );
+        })}
+      </nav>
+
+      <div className="mt-auto">
+        <hr className="border-gray-100 mx-6" />
+        <div className="p-4">
+          <div className="flex items-center gap-3 bg-gray-50/50 p-4 rounded-2xl relative">
+            <div className="w-10 h-10 rounded-full bg-[#FF6B35]/10 flex items-center justify-center text-[#FF6B35] font-bold overflow-hidden border border-[#FF6B35]/20">
+              A
+            </div>
+            <div className="overflow-hidden text-left">
+              <p className="text-sm font-medium text-gray-800 truncate">
+                Admin User
+              </p>
+              <p className="text-[11px] text-gray-400 truncate">
+                admin@platform.com
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
   );
 };
 
 export default AdminSidebar;
-
-// // AdminSidebar.tsx
-// import logo from "@/assets/Logo/LogoMain.svg";
-// import { Badge } from "@/components/ui/badge";
-
-// import { RiShareBoxLine } from "react-icons/ri";
-// import { ChevronDown } from "lucide-react";
-// import { Link, useLocation } from "react-router-dom";
-// import { useState } from "react";
-
-// import Dashboard from "@/assets/icon/dashboard.svg";
-// import UserManagement from "@/assets/icon/UserManagement.svg";
-// import Patients from "@/assets/icon/Patients.svg";
-// import PatientAssignment from "@/assets/icon/PatientAssignment.svg";
-// import ProtocolManagement from "@/assets/icon/ProtocolManagement.svg";
-// import AuditLog from "@/assets/icon/AuditLog.svg";
-// import Settings from "@/assets/icon/Settings.svg";
-
-// // Types
-// export interface SidebarItem {
-//   icon: string; // now icon is a string (image src)
-//   label: string;
-//   href?: string;
-//   badge?: string;
-//   children?: { label: string; href: string }[];
-// }
-
-// export interface SidebarProps {
-//   items?: SidebarItem[];
-//   onItemClick?: () => void;
-// }
-
-// // Sidebar Items
-// const defaultSidebarItems: SidebarItem[] = [
-//   { icon: Dashboard, label: "Dashboard", href: "/admin-dashboard/dashboard" },
-//   {
-//     icon: UserManagement,
-//     label: "User Management",
-//     href: "/admin-dashboard/user-management",
-//   },
-//   { icon: Patients, label: "Patients", href: "/admin-dashboard/patients" },
-//   {
-//     icon: PatientAssignment,
-//     label: "Patient Assignment",
-//     href: "/admin-dashboard/patient-assignment",
-//   },
-//   {
-//     icon: ProtocolManagement,
-//     label: "Protocol Management",
-//     href: "/admin-dashboard/protocol-management",
-//   },
-//   { icon: AuditLog, label: "Audit Log", href: "/admin-dashboard/audit-log" },
-//   { icon: Settings, label: "Settings", href: "/admin-dashboard/settings" },
-// ];
-
-// const AdminSidebar: React.FC<SidebarProps> = ({
-//   items = defaultSidebarItems,
-//   onItemClick,
-// }) => {
-//   const location = useLocation();
-//   const [openMenu, setOpenMenu] = useState<string | null>(null);
-
-//   const toggleMenu = (label: string) => {
-//     setOpenMenu(openMenu === label ? null : label);
-//   };
-
-//   return (
-//     <div
-//       className="flex flex-col h-full bg-[#29424C]"
-//       style={{ boxShadow: "3px 4px 42.3px 0px #0000001A" }}
-//     >
-//       {/* Logo */}
-//       <Link to="/admin-dashboard/dashboard">
-//         <div className="flex items-center justify-center p-2 sm:p-3 border-b border-[#C9C6C3] mt-1">
-//           <div className="flex justify-center mb-1">
-//             <img src={logo} alt="Logo" className="h-8 w-35 " />
-//           </div>
-//         </div>
-//       </Link>
-
-//       {/* Navigation */}
-//       <nav className="flex-1 p-2 md:p-4">
-//         <div className="space-y-4 md:space-y-6">
-//           {items.map((item) => {
-//             const isActive =
-//               location.pathname === item.href ||
-//               item.children?.some((child) => location.pathname === child.href);
-//             const isOpen = openMenu === item.label;
-
-//             return (
-//               <div key={item.label}>
-//                 {item.href && !item.children ? (
-//                   <Link
-//                     to={item.href}
-//                     onClick={onItemClick}
-//                     className={`flex items-center justify-between w-full px-3 py-2 text-sm font-normal transition-all duration-300 ease-in-out ${
-//                       isActive
-//                         ? "text-[#F3AA4B] bg-[#FEF7ED] rounded-xl shadow-md"
-//                         : "text-white hover:text-[#F3AA4B] hover:bg-[#FEF7ED] hover:rounded-xl hover:shadow-md"
-//                     }`}
-//                   >
-//                     <div className="flex items-center space-x-2 md:text-lg">
-//                       <img
-//                         src={item.icon}
-//                         alt={item.label}
-//                         className={`w-5 h-5 transition-colors duration-300 ${
-//                           isActive
-//                             ? "filter brightness-0 invert sepia saturate-500 hue-rotate-[30deg] text-[#F3AA4B]"
-//                             : "filter brightness-0 invert"
-//                         } hover:filter hover:brightness-0 hover:invert hover:sepia hover:saturate-500 hover:hue-rotate-[30deg]`}
-//                       />
-//                       <span>{item.label}</span>
-//                     </div>
-//                   </Link>
-//                 ) : (
-//                   <button
-//                     onClick={() => toggleMenu(item.label)}
-//                     className={`flex items-center justify-between w-full px-3 py-2 text-sm font-normal transition-all duration-300 ease-in-out cursor-pointer ${
-//                       isActive
-//                         ? "text-[#3A5CFF] bg-[#1C1D28] rounded-xl shadow-md"
-//                         : "text-white hover:text-[#3A5CFF] hover:bg-[#1C1D28]/80 hover:rounded-xl hover:shadow-md"
-//                     }`}
-//                   >
-//                     <div className="flex items-center space-x-2 md:text-lg">
-//                       <img
-//                         src={item.icon}
-//                         alt={item.label}
-//                         className={`w-5 h-5 transition-all duration-300 ${
-//                           isActive ? "filter brightness-125" : ""
-//                         }`}
-//                       />
-//                       <span>{item.label}</span>
-//                     </div>
-
-//                     {item.children && (
-//                       <ChevronDown
-//                         className={`w-4 h-4 transform transition-transform duration-300 ${
-//                           isOpen ? "rotate-180" : ""
-//                         }`}
-//                       />
-//                     )}
-
-//                     {item.badge && (
-//                       <Badge
-//                         variant="secondary"
-//                         className="text-xs bg-[#3A5CFF]/10 text-[#3A5CFF] border border-[#3A5CFF]/30"
-//                       >
-//                         {item.badge}
-//                       </Badge>
-//                     )}
-//                   </button>
-//                 )}
-
-//                 {item.children && isOpen && (
-//                   <div className="ml-6 mt-2 space-y-2">
-//                     {item.children.map((child) => {
-//                       const childActive = location.pathname === child.href;
-//                       return (
-//                         <Link
-//                           key={child.label}
-//                           to={child.href}
-//                           onClick={onItemClick}
-//                           className={`block px-3 py-2 text-sm rounded-lg transition-all ${
-//                             childActive
-//                               ? "text-[#3A5CFF] bg-[#1C1D28]"
-//                               : "text-gray-300 hover:text-[#3A5CFF] hover:bg-[#1C1D28]/70"
-//                           }`}
-//                         >
-//                           {child.label}
-//                         </Link>
-//                       );
-//                     })}
-//                   </div>
-//                 )}
-//               </div>
-//             );
-//           })}
-//         </div>
-//       </nav>
-
-//       {/* Help & Support */}
-//       <div className="p-2 md:p-4 border-t border-[#C9C6C3]">
-//         <div className="flex justify-center mb-1">
-//           <img src={logo} alt="Logo" className="h-5 w-auto" />
-//         </div>
-//         <Link
-//           to="/client-dashboard/help-support"
-//           className="flex items-center justify-center space-x-3 text-white hover:text-[#3A5BF8] transition-colors"
-//         >
-//           <span className="text-sm font-medium">Help & Support</span>
-//           <RiShareBoxLine className="w-5 h-5 text-gray-300" />
-//         </Link>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AdminSidebar;

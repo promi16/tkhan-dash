@@ -1,6 +1,6 @@
 import AdminDashboardNavBar from "@/components/AdminDashboard/Shared/AdminDashboardNavBar";
 import AdminSidebar from "@/components/AdminDashboard/Shared/AdminSidebar";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 
@@ -14,7 +14,6 @@ const AdminLayout = () => {
 
   const shouldHideSidebar = () => {
     const hideExact = ["/client-dashboard/add-product"];
-
     const pathnameSegments = pathname.split("/");
 
     const isProductDetails =
@@ -71,23 +70,26 @@ const AdminLayout = () => {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gradient-to-r from-[#052318] via-[#0A1C19] to-[#0F131B]">
-      {/* Sidebar - Fixed on Desktop */}
+    <div className="flex h-screen overflow-hidden bg-[#F9FAFB]">
+      {/* Sidebar - Desktop */}
       {!shouldHideSidebar() && (
-        <div className="hidden lg:flex w-72 flex-col fixed inset-y-0 z-30  bg-[#052218]">
+        <div
+          className="hidden lg:flex w-[280px] flex-col fixed top-0 left-0 z-30 bg-transparent"
+          style={{ height: "600px" }}
+        >
           <AdminSidebar />
         </div>
       )}
 
-      {/* Main Content */}
+      {/* Main Content Area */}
       <div
         className={`flex flex-col flex-1 transition-all duration-200 ease-in-out ${
-          !shouldHideSidebar() ? "lg:ml-72" : ""
+          !shouldHideSidebar() ? "lg:ml-[280px]" : ""
         }`}
       >
         {/* Navbar */}
         {!shouldHideNavbar && (
-          <div className="fixed top-0 left-0 right-0 z-20 bg-white ">
+          <div className="fixed top-0 left-0 lg:left-[280px] right-0 z-20 bg-white border-b border-gray-100">
             <AdminDashboardNavBar
               onMobileMenuToggle={handleMobileMenuToggle}
               notificationCount={3}
@@ -96,23 +98,26 @@ const AdminLayout = () => {
           </div>
         )}
 
-        {/* Mobile Sidebar */}
+        {/* Mobile Sidebar (Sheet) */}
         <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-          <SheetTrigger asChild>
-            <div className="hidden" />
-          </SheetTrigger>
-          <SheetContent side="left" className="w-72 p-0 bg-[#0E131A]">
+          <SheetContent
+            side="left"
+            className="w-[280px] p-0 bg-white border-none"
+          >
             <AdminSidebar onItemClick={() => setIsMobileMenuOpen(false)} />
           </SheetContent>
         </Sheet>
 
         {/* Scrollable Page Content */}
         <main
-          className={`flex-1 overflow-y-auto mt-16 text-black bg-white ${
-            isSidebarOpen ? "pt-4 md:pt-10" : "p-4 md:p-10"
+          className={`flex-1 overflow-y-auto mt-16 text-black bg-[#F9FAFB] ${
+            isSidebarOpen ? "p-4 md:p-6" : "p-4 md:p-8" // Padding ektu komano hoyeche width boro korar jonno
           }`}
         >
-          <Outlet />
+          {/* max-w bariye 1800px kora holo jate StatsCard boro hoye jay */}
+          <div className="max-w-[1800px] mx-auto w-full">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>

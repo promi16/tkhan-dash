@@ -1,7 +1,6 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Search, UserX } from "lucide-react";
-// import "../../index.css";
 
 export const UserTable = ({
   onViewDetails,
@@ -102,8 +101,8 @@ export const UserTable = ({
   }, [roleFilter, statusFilter, searchQuery]);
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden w-full transition-all duration-300">
-      <div className="p-4 md:p-6 border-b border-slate-100 flex flex-col md:flex-row gap-4 items-center">
+    <div className="w-full font-inter">
+      <div className="p-4 md:p-6 flex flex-col lg:flex-row gap-4 items-center">
         <div className="relative flex-1 w-full">
           <Search
             className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
@@ -111,14 +110,14 @@ export const UserTable = ({
           />
           <input
             type="text"
-            placeholder="Search users..."
+            placeholder="Search..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 h-12 bg-slate-50 border border-slate-200 rounded-xl outline-none text-sm focus:border-[#FF6B35] focus:bg-white transition-all"
+            className="w-full pl-11 pr-4 h-11 md:h-12 bg-slate-50 border border-slate-200 rounded-xl outline-none text-sm focus:border-[#FF6B35] focus:bg-white transition-all font-light"
           />
         </div>
 
-        <div className="flex gap-2 w-full md:w-auto">
+        <div className="flex flex-row gap-2 w-full lg:w-auto">
           {[
             {
               label: roleFilter,
@@ -135,15 +134,15 @@ export const UserTable = ({
               opts: ["All Status", "Active", "Blocked"],
             },
           ].map((drop, i) => (
-            <div key={i} className="relative flex-1 md:flex-none">
+            <div key={i} className="relative flex-1 lg:flex-none">
               <button
                 onClick={() => drop.toggle(!drop.open)}
-                className="cursor-pointer w-full h-12 px-4 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between gap-3 text-sm text-slate-600 hover:border-[#FF6B35] transition-all"
+                className="cursor-pointer w-full min-w-[110px] h-11 md:h-12 px-2 md:px-4 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between gap-1 md:gap-2 text-[11px] md:text-sm text-slate-600 hover:border-[#FF6B35] transition-all font-light"
               >
-                {drop.label}{" "}
+                <span className="truncate">{drop.label}</span>
                 <ChevronDown
-                  size={16}
-                  className={`transition-transform ${drop.open ? "rotate-180" : ""}`}
+                  size={14}
+                  className={`transition-transform flex-shrink-0 ${drop.open ? "rotate-180" : ""}`}
                 />
               </button>
               <AnimatePresence>
@@ -152,7 +151,7 @@ export const UserTable = ({
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
-                    className="absolute top-[56px] right-0 w-full md:w-[160px] bg-white shadow-2xl rounded-xl p-2 z-50 border border-slate-100"
+                    className="absolute top-[48px] md:top-[56px] left-0 md:right-0 w-full md:w-[160px] bg-white shadow-2xl rounded-xl p-2 z-50 border border-slate-100"
                   >
                     {drop.opts.map((opt) => (
                       <button
@@ -161,11 +160,7 @@ export const UserTable = ({
                           drop.set(opt);
                           drop.toggle(false);
                         }}
-                        className={`cursor-pointer w-full text-left px-4 py-2.5 rounded-lg text-sm transition-all ${
-                          drop.label === opt
-                            ? "bg-[#FF6B35] text-white font-bold"
-                            : "text-slate-600 hover:bg-slate-50"
-                        }`}
+                        className={`cursor-pointer w-full text-left px-4 py-2 rounded-lg text-xs md:text-sm transition-all ${drop.label === opt ? "bg-[#FF6B35] text-white font-medium" : "text-black hover:bg-slate-50 font-medium"}`}
                       >
                         {opt}
                       </button>
@@ -178,86 +173,102 @@ export const UserTable = ({
         </div>
       </div>
 
-      <div className="overflow-x-auto scrollbar-hide">
-        <table className="w-full text-left border-collapse">
-          <thead className="bg-slate-50/50">
-            <tr className="text-[11px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">
-              <th className="py-5 px-6">Name</th>
-              <th className="py-5 px-6 hidden sm:table-cell">Contact</th>
-              <th className="py-5 px-6">Role</th>
-              <th className="py-4 px-6">Status</th>
-              <th className="py-5 px-6 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-50">
-            {filteredUsers.length > 0 ? (
-              filteredUsers.map((u) => (
-                <motion.tr
-                  layout
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  key={u.id}
-                  className="hover:bg-slate-50/80 transition-colors group"
-                >
-                  <td className="py-4 px-6">
-                    <div className="flex flex-col">
-                      <span className="text-sm font-bold text-slate-800 group-hover:text-[#FF6B35] transition-colors">
-                        {u.name}
-                      </span>
-                      <span className="text-[10px] text-slate-400 uppercase font-black">
-                        {u.id}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="py-4 px-6 hidden sm:table-cell">
-                    <div className="flex flex-col">
-                      <span className="text-xs text-slate-600">{u.email}</span>
-                      <span className="text-[11px] text-slate-400">
-                        {u.phone}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="py-4 px-6">
-                    <span
-                      className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase ${u.role === "Buyer" ? "bg-slate-100 text-slate-500" : "bg-blue-50 text-blue-500"}`}
+      <div className="grid grid-cols-1 lg:grid-cols-1 xl:grid-cols-4 gap-5">
+        <div className="xl:col-span-4 w-full">
+          <div className="w-full overflow-x-auto bg-white rounded-xl shadow-sm border border-[#E3E3E4]">
+            <table className="min-w-[800px] w-full text-sm">
+              <thead className="border-b border-[#DBE0E5] bg-gray-50">
+                <tr className="text-[10px] md:text-[11px] font-medium text-slate-500 uppercase tracking-widest">
+                  <th className="py-4 px-4 md:px-6 text-left">Name</th>
+                  <th className="py-4 px-4 md:px-6 text-left">Email/Phone</th>
+                  <th className="py-4 px-4 md:px-6 text-center lg:text-left">
+                    Role
+                  </th>
+                  <th className="py-4 px-4 md:px-6 text-center lg:text-left">
+                    Status
+                  </th>
+                  <th className="py-4 px-4 md:px-6 hidden md:table-cell text-left">
+                    Join Date
+                  </th>
+                  <th className="py-4 px-4 md:px-6 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-50">
+                {filteredUsers.length > 0 ? (
+                  filteredUsers.map((u) => (
+                    <motion.tr
+                      layout
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      key={u.id}
+                      // Changed hover:bg-slate-50/80 to hover:bg-orange-50/60 for the orange shade
+                      className="hover:bg-orange-50/60 transition-colors group"
                     >
-                      {u.role}
-                    </span>
-                  </td>
-                  <td className="py-4 px-6">
-                    <span
-                      className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase ${u.status === "Active" ? "bg-emerald-50 text-emerald-600" : "bg-rose-50 text-rose-600"}`}
-                    >
-                      {u.status}
-                    </span>
-                  </td>
-                  <td className="py-4 px-6 text-right">
-                    <button
-                      onClick={() => onViewDetails(u.id)}
-                      className="cursor-pointer px-4 py-2 rounded-lg text-xs font-black text-slate-700 border border-slate-200 hover:border-[#FF6B35] hover:text-[#FF6B35] hover:bg-white hover:shadow-sm transition-all active:scale-95"
-                    >
-                      View Details
-                    </button>
-                  </td>
-                </motion.tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={5} className="py-20 text-center">
-                  <div className="flex flex-col items-center gap-3 grayscale opacity-60">
-                    <UserX size={48} />
-                    <p className="text-lg font-bold text-slate-800">
-                      No Match Found
-                    </p>
-                    <p className="text-sm text-slate-400">
-                      We couldn't find any user matching your search.
-                    </p>
-                  </div>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+                      <td className="py-3 md:py-4 px-4 md:px-6">
+                        <div className="flex flex-col">
+                          <span className="text-xs md:text-sm font-semibold text-slate-900 group-hover:text-[#FF6B35] transition-colors whitespace-nowrap">
+                            {u.name}
+                          </span>
+                          <span className="text-[9px] md:text-[10px] text-slate-400 uppercase font-light">
+                            {u.id}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="py-3 md:py-4 px-4 md:px-6">
+                        <div className="flex flex-col max-w-[150px] md:max-w-none">
+                          <span className="text-[10px] md:text-sm text-slate-900 font-light truncate">
+                            {u.email}
+                          </span>
+                          <span className="text-[9px] md:text-[11px] text-slate-500 font-light">
+                            {u.phone}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="py-3 md:py-4 px-4 md:px-6 text-center lg:text-left">
+                        <span
+                          className={`px-2 py-1 rounded-3xl text-[9px] md:text-[10px] font-medium inline-block whitespace-nowrap ${u.role === "Buyer" ? "bg-slate-200 text-black" : "bg-blue-100 text-blue-600"}`}
+                        >
+                          {u.role}
+                        </span>
+                      </td>
+                      <td className="py-3 md:py-4 px-4 md:px-6 text-center lg:text-left">
+                        <span
+                          className={`px-2 py-1 rounded-3xl text-[9px] md:text-[10px] font-medium inline-block whitespace-nowrap ${u.status === "Active" ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800"}`}
+                        >
+                          {u.status}
+                        </span>
+                      </td>
+                      <td className="py-3 md:py-4 px-4 md:px-6 hidden md:table-cell">
+                        <span className="text-[11px] md:text-sm text-slate-900 font-light whitespace-nowrap">
+                          {u.date}
+                        </span>
+                      </td>
+                      <td className="py-3 md:py-4 px-4 md:px-6 text-right">
+                        <button
+                          onClick={() => onViewDetails(u.id)}
+                          className="font-light px-4 py-2 rounded-lg text-[#1A1A1A] hover:font-bold transition-all duration-300 hover:bg-[#F26522] hover:cursor-pointer whitespace-nowrap  hover:text-white hover:shadow-lg hover:shadow-[#F26522]/30 active:scale-95"
+                        >
+                          View Details
+                        </button>
+                      </td>
+                    </motion.tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={6} className="py-20 text-center">
+                      <div className="flex flex-col items-center gap-3 grayscale opacity-60">
+                        <UserX size={40} />
+                        <p className="text-base font-light text-slate-800">
+                          No Match Found
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   );

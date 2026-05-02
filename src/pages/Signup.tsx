@@ -11,7 +11,6 @@ const Signup = () => {
   return (
     <div className="min-h-screen flex items-center justify-center  text-white">
       <div className="max-w-5xl w-full   flex overflow-hidden">
-        {/* Left Side - Image */}
         <div className="hidden md:flex w-1/2  items-center justify-center">
           <img
             src={signupphoto}
@@ -19,7 +18,6 @@ const Signup = () => {
           />
         </div>
 
-        {/* Right Side - Form */}
         <div className="w-full md:w-1/2 p-10 flex flex-col justify-center">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-sans mb-2">
             CREATE YOUR ACCOUNT
@@ -29,8 +27,6 @@ const Signup = () => {
           </p>
 
           <form className="space-y-4">
-            {/* Full Name */}
-
             <div className="flex flex-col mb-4">
               <label htmlFor="name" className="text-white font-sans mb-2">
                 Full Name
@@ -41,8 +37,6 @@ const Signup = () => {
                 className="w-full px-4 py-3 rounded-[20px] bg-[#0F2B2E] text-white focus:ring-2 focus:ring-sky-300 outline-none"
               />
             </div>
-
-            {/* Phone */}
 
             <div className="flex flex-col mb-4">
               <label htmlFor="number" className="text-white font-sans mb-2">
@@ -58,7 +52,6 @@ const Signup = () => {
               </div>
             </div>
 
-            {/* Email */}
             <div className="flex flex-col mb-4">
               <label htmlFor="email" className="text-white font-sans mb-2">
                 Email
@@ -70,7 +63,6 @@ const Signup = () => {
                 className="w-full px-4 py-3 rounded-[20px] bg-[#0F2B2E] text-white focus:ring-2 focus:ring-sky-300 outline-none"
               />
             </div>
-            {/* Password */}
 
             <div className="flex flex-col mb-4">
               <label htmlFor="password" className="text-white font-sans mb-2">
@@ -89,7 +81,6 @@ const Signup = () => {
                        transition-all duration-300 shadow-sm hover:shadow-md"
                 />
 
-                {/* Show eye only if password is not empty */}
                 {password && (
                   <button
                     type="button"
@@ -110,7 +101,6 @@ const Signup = () => {
               </div>
             </div>
 
-            {/* Re-type Password */}
             <div className="flex flex-col mb-4">
               <label
                 htmlFor="retypePassword"
@@ -130,7 +120,6 @@ const Signup = () => {
                        transition-all duration-300 shadow-sm hover:shadow-md"
                 />
 
-                {/* Show eye only if retype password is not empty */}
                 {retypePassword && (
                   <button
                     type="button"
@@ -152,7 +141,7 @@ const Signup = () => {
                 )}
               </div>
             </div>
-            {/* Register Button */}
+
             <button
               type="submit"
               className="w-full bg-[#346778] text-white hover:bg-[#114050] font-sans py-3 rounded-[20px] transition cursor-pointer"
@@ -161,7 +150,6 @@ const Signup = () => {
             </button>
           </form>
 
-          {/* Login Redirect */}
           <p className="text-sm text-gray-400 mt-4 text-center">
             Already have an account?
             <a href="/login" className="text-blue-400 hover:text-sky-300 ml-1">

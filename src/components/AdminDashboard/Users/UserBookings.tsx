@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 interface UserBookingsProps {
   user?: {
     name: string;
-    // Baki proyojoniyo fields ekhane thakbe
   };
 }
 
@@ -14,25 +13,23 @@ export const UserBookings: React.FC<UserBookingsProps> = ({ user }) => {
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="bg-white p-6 md:p-8 lg:p-10 rounded-2xl border border-gray-100 shadow-sm max-w-[1000px]"
+      className="bg-white p-6 md:p-8 lg:p-10 rounded-[10px] border border-gray-100 shadow-sm w-full max-w-[1200px] min-h-fit lg:h-auto mb-10 md:mb-20"
     >
-      {/* Header section with Ongoing badge */}
       <div className="flex justify-end mb-6">
-        <span className="bg-[#10B981] text-white text-[10px] md:text-xs font-medium px-4 py-1 rounded-lg uppercase tracking-wide">
+        <span className="bg-[#10B981] text-white text-[10px] md:text-xs font-medium px-4 md:px-5 py-2 rounded-lg tracking-wide md:mr-5">
           Ongoing
         </span>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
-        {/* Left Column: Total Package and Service Info */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-4 xl:gap-12">
         <div className="lg:col-span-4 space-y-8">
           <motion.div
             whileHover={{ scale: 1.02 }}
-            className="bg-[#FF6B35] p-8 rounded-2xl text-white shadow-lg shadow-orange-100"
+            className="bg-[#FF6B35] p-5 w-full md:max-w-[400px] rounded-2xl text-white shadow-lg shadow-orange-100"
           >
             <div className="flex items-center gap-2 mb-1">
               <span className="text-lg">$</span>
-              <p className="text-[10px] font-medium opacity-90 uppercase tracking-widest">
+              <p className="text-[10px] font-medium opacity-90 tracking-widest uppercase">
                 Total Package
               </p>
             </div>
@@ -42,19 +39,19 @@ export const UserBookings: React.FC<UserBookingsProps> = ({ user }) => {
           </motion.div>
 
           <div className="space-y-4">
-            <h4 className="font-medium text-[#1E293B] text-[11px] uppercase tracking-widest">
+            <h4 className="font-medium text-[#1E293B] text-[13px] sm:ml-3">
               Service Information
             </h4>
-            <div className="space-y-4">
+            <div className="space-y-4 sm:ml-3">
               <div className="flex justify-between items-center">
                 <p className="text-xs text-[#64748B] font-normal">Service</p>
-                <p className="text-sm font-medium text-[#FF6B35]">$120</p>
+                <p className="text-md font-medium text-[#FF6B35]">$120</p>
               </div>
               <p className="text-sm font-medium text-[#1E293B] -mt-2">
                 Premium Service Package
               </p>
 
-              <div className="bg-[#FFF7F4] p-4 rounded-xl border border-[#FFEDE8] space-y-1">
+              <div className="bg-[#FFF7F4] p-4 rounded-xl border border-[#FFEDE8] space-y-1 w-full md:max-w-[350px]">
                 <div className="flex items-center gap-2 text-[#FF6B35]">
                   <svg
                     width="14"
@@ -78,33 +75,33 @@ export const UserBookings: React.FC<UserBookingsProps> = ({ user }) => {
                     <line x1="8" y1="2" x2="8" y2="6"></line>
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                   </svg>
-                  <p className="text-[10px] font-medium uppercase tracking-wider">
+                  <p className="text-[13px] font-light text-gray-400">
                     Date & Time
                   </p>
                 </div>
-                <p className="text-sm font-medium text-[#1E293B]">
+                <p className="text-sm font-light text-[#1E293B]">
                   Apr 13, 2026
                 </p>
-                <p className="text-sm font-medium text-[#FF6B35]">10:00 AM</p>
+                <p className="text-sm font-light text-[#FF6B35]">10:00 AM</p>
               </div>
 
               <div>
-                <p className="text-[10px] text-[#94A3B8] font-medium uppercase tracking-widest">
+                <p className="text-[13px] text-[#94A3B8] font-light">
                   Duration
                 </p>
-                <p className="text-sm font-medium text-[#1E293B]">2 hours</p>
+                <p className="text-md font-medium text-[#1E293B]">2 hours</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Middle Column: Add-Ons and Location */}
-        <div className="lg:col-span-5 space-y-8">
+        <div className="lg:col-span-5 space-y-12 md:space-y-20 lg:ml-8">
           <div>
-            <h4 className="font-medium text-[#1E293B] text-[11px] uppercase tracking-widest flex items-center gap-2 mb-4">
+            <h4 className="font-medium text-black text-[16px] flex items-center gap-2 mb-6">
               <span className="text-[#FF6B35]">✦</span> Add-Ons Selected
             </h4>
-            <div className="space-y-5">
+
+            <div className="space-y-6 w-full md:max-w-[380px]">
               {[
                 { n: "De-shedding Treatment", p: 25, d: "20 mins" },
                 { n: "Nail Grinding", p: 10, d: "10 mins" },
@@ -129,10 +126,10 @@ export const UserBookings: React.FC<UserBookingsProps> = ({ user }) => {
           </div>
 
           <div className="space-y-4">
-            <h4 className="font-medium text-[#1E293B] text-[11px] uppercase tracking-widest">
+            <h4 className="font-medium text-[#1E293B] text-[15px]">
               Service Location
             </h4>
-            <div className="bg-[#F8FAFC] p-3 px-4 rounded-xl border border-gray-100 inline-flex items-center gap-3">
+            <div className="bg-orange-50 p-3 px-4 max-w-fit rounded-xl border border-gray-100 inline-flex items-center gap-3">
               <svg
                 width="16"
                 height="16"
@@ -146,12 +143,15 @@ export const UserBookings: React.FC<UserBookingsProps> = ({ user }) => {
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                 <polyline points="9 22 9 12 15 12 15 22"></polyline>
               </svg>
-              <span className="text-sm font-medium text-[#FF6B35]">
+              <motion.span
+                whileHover={{ scale: 1.05, color: "#e55a2b" }}
+                className="text-sm font-light text-[#FF6B35] cursor-pointer inline-block"
+              >
                 At-home Groom
-              </span>
+              </motion.span>
             </div>
             <div className="space-y-1">
-              <p className="text-[10px] text-[#94A3B8] font-medium uppercase tracking-widest flex items-center gap-2">
+              <p className="text-[14px] text-gray-500 font-light flex items-center gap-2">
                 <svg
                   width="12"
                   height="12"
@@ -159,6 +159,7 @@ export const UserBookings: React.FC<UserBookingsProps> = ({ user }) => {
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
+                  color="#FF6B35"
                 >
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                   <circle cx="12" cy="10" r="3"></circle>
@@ -172,10 +173,9 @@ export const UserBookings: React.FC<UserBookingsProps> = ({ user }) => {
           </div>
         </div>
 
-        {/* Right Column: Seller Profile Card (Dynamic Seller Info) */}
         <div className="lg:col-span-3">
-          <div className="bg-white p-6 rounded-2xl text-center border border-[#FFEDE8] shadow-sm">
-            <p className="text-[11px] text-[#94A3B8] font-medium uppercase tracking-widest mb-4">
+          <div className="bg-white px-6 md:px-10 py-5 rounded-2xl lg:mr-6 text-center border border-[#FFEDE8] shadow-sm">
+            <p className="text-[15px] text-[#94A3B8] font-medium mb-4">
               Seller
             </p>
             <div className="relative inline-block">
@@ -185,14 +185,13 @@ export const UserBookings: React.FC<UserBookingsProps> = ({ user }) => {
                 alt="seller"
               />
             </div>
-            {/* Dynamic Seller Name */}
             <h3 className="font-medium text-[#1E293B] text-base mb-6 tracking-tight">
               {user?.name || "Sarah Jenkins"}
             </h3>
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full py-3 bg-[#FF6B35] text-white rounded-xl font-medium text-[10px] uppercase tracking-[0.15em] transition-all"
+              className="w-full py-3 px-2  bg-[#FF6B35] text-white rounded-xl font-medium text-[12px] whitespace-nowrap tracking-[0.15em] md:tracking-[0.05em] cursor-pointer transition-all flex-shrink-0"
             >
               View Details
             </motion.button>

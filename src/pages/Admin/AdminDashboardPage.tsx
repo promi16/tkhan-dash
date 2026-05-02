@@ -1,4 +1,3 @@
-import React from "react";
 import { motion } from "framer-motion";
 import { Users, UserCheck, Calendar, DollarSign } from "lucide-react";
 import "../../index.css";
@@ -6,9 +5,6 @@ import { StatsCard } from "@/components/AdminDashboard/Dashboard/StatsCard";
 import { ChartsSection } from "@/components/AdminDashboard/Dashboard/ChartsSection";
 import { RecentUsers } from "@/components/AdminDashboard/Dashboard/RecentUsers";
 
-// Components folder theke choto choto parts gulo import kora holo
-
-// Dynamic Data Logic (Optional: eita ekta separate data file eo rakhte paren)
 const chartData = Array.from({ length: 7 }).map((_, i) => ({
   name: new Date(Date.now() - (6 - i) * 24 * 60 * 60 * 1000).toLocaleDateString(
     "en-US",
@@ -21,12 +17,14 @@ const chartData = Array.from({ length: 7 }).map((_, i) => ({
 const AdminDashboardPage = () => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
+      className="bg-[#F9FAFB] min-h-screen w-full flex flex-col p-4 md:p-8 lg:p-10 overflow-x-hidden"
     >
-      {/* Top 4 Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      {/* --- Responsive Stats Cards Section --- */}
+      {/* Change: grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
         <StatsCard
           title="Total Users"
           value="2,847"
@@ -37,7 +35,7 @@ const AdminDashboardPage = () => {
           title="Active Sellers"
           value="1,243"
           icon={UserCheck}
-          color="blue"
+          color="orange"
         />
         <StatsCard
           title="Today's Bookings"
@@ -49,15 +47,15 @@ const AdminDashboardPage = () => {
           title="Today's Revenue"
           value="$12,450"
           icon={DollarSign}
-          color="green"
+          color="orange"
         />
       </div>
 
-      {/* Graphs/Charts Section */}
-      <ChartsSection data={chartData} />
+      <div className="w-full">
+        <ChartsSection data={chartData} />
+      </div>
 
-      {/* Recent User Registrations */}
-      <div className="mt-8">
+      <div className="mt-8 w-full">
         <RecentUsers />
       </div>
     </motion.div>
